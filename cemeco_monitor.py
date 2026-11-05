@@ -72,6 +72,13 @@ def main() -> None:
         print("Heç bir lot linki tapılmadı (ya lot yoxdur, ya da saytın quruluşu fərqlidir).")
         return
 
+    # Satılmış ("Продан"/"Продано") və geri götürülmüş ("Снят") lotları atırıq
+    SKIP_WORDS = ("продан", "снят")
+    active = {k: v for k, v in lots.items()
+              if not any(w in v.lower() for w in SKIP_WORDS)}
+    print(f"Cəmi {len(lots)} lot, satılmamış: {len(active)}")
+    lots = active
+
     seen = load_seen()
     first_run = not seen
     new = {k: v for k, v in lots.items() if k not in seen}

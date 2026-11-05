@@ -1,0 +1,31 @@
+name: Cemeco Fat Bob monitor
+
+on:
+  schedule:
+    - cron: "0 5 * * *"    # hər gün 09:00 Bakı vaxtı
+    - cron: "0 15 * * *"   # hər gün 19:00 Bakı vaxtı
+  workflow_dispatch:        # əl ilə işə salmaq üçün
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests beautifulsoup4
+      - run: python cemeco_monitor.py
+        env:
+          TG_TOKEN: ${{ secrets.TG_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+      - name: Görülmüş lotları yadda saxla
+        run: |
+          git config user.name "monitor-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add seen.json
+          git commit -m "update seen lots" || echo "dəyişiklik yoxdur"
+          git push

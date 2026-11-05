@@ -2,8 +2,7 @@ name: Cemeco Fat Bob monitor
 
 on:
   schedule:
-    - cron: "0 5 * * *"    # hər gün 09:00 Bakı vaxtı
-    - cron: "0 15 * * *"   # hər gün 19:00 Bakı vaxtı
+    - cron: "*/15 * * * *"   # hər 15 dəqiqədən bir
   workflow_dispatch:        # əl ilə işə salmaq üçün
 
 permissions:
